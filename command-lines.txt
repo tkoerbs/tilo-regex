@@ -1,0 +1,1 @@
+java -classpath D:\Projects\github.com\tkoerbs\tilo-regex\trunk\dist\tilo-regex.jar tests.de.tilo_koerbs.regex x* hafdsagxxgf
