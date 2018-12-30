@@ -1,5 +1,6 @@
-package de.tilo_koerbs.regex.internal;
+package de.tilo_koerbs.regex.internal.token;
 
+import de.tilo_koerbs.regex.internal.LogLevel;
 import java.util.ArrayList;
 import java.util.Iterator;
 

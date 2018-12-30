@@ -1,14 +1,16 @@
 package de.tilo_koerbs.regex;
 
 import de.tilo_koerbs.regex.internal.LogLevel;
-import de.tilo_koerbs.regex.internal.Tokenizer;
+import de.tilo_koerbs.regex.internal.token.Token;
+import de.tilo_koerbs.regex.internal.token.Tokenizer;
+import java.util.ArrayList;
 
 public class Pattern
 {
     public static Pattern compile(String regex)
     {
         Tokenizer tokenizer = new Tokenizer(LogLevel.DEBUG);
-        tokenizer.tokenize(regex);
+        ArrayList<Token> tokenList = tokenizer.tokenize(regex);
         
         return new Pattern();
     }

@@ -1,4 +1,4 @@
-package de.tilo_koerbs.regex.internal;
+package de.tilo_koerbs.regex.internal.token;
 
 public enum TokenClass {
     CHARACTER(),
