@@ -69,7 +69,7 @@ public class Tokenizer {
                     else
                     {
                         // * greedy quantifier "zero or more times"
-                        token = new Token(TokenClass.STAR_GREEDY, new Character(char1).toString());
+                        token = new Token(TokenClass.STAR_GREEDY, new Character(char1).toString(), currentPosition);
                     }
                     break;
                 case '?':
@@ -86,7 +86,7 @@ public class Tokenizer {
                     else
                     {
                         // ? greedy quantifier "once or not at all"
-                        token = new Token(TokenClass.QUESTIONMARK_GREEDY, new Character(char1).toString());
+                        token = new Token(TokenClass.QUESTIONMARK_GREEDY, new Character(char1).toString(), currentPosition);
                     }
                     break;
                 case '+':
@@ -103,23 +103,23 @@ public class Tokenizer {
                     else
                     {
                         // + greedy quantifier "one or more times"
-                        token = new Token(TokenClass.PLUS_GREEDY, new Character(char1).toString());
+                        token = new Token(TokenClass.PLUS_GREEDY, new Character(char1).toString(), currentPosition);
                     }
                     break;
                 case '|':
                     // | logical operator "either or"
-                    token = new Token(TokenClass.OR, new Character(char1).toString());
+                    token = new Token(TokenClass.OR, new Character(char1).toString(), currentPosition);
                     break;
                 case '(':
                     // ( start of a capturing group
-                    token = new Token(TokenClass.OPENING_PARENTHESIS, new Character(char1).toString());
+                    token = new Token(TokenClass.OPENING_PARENTHESIS, new Character(char1).toString(), currentPosition);
                     break;
                 case ')':
                     // ( end of a capturing group
-                    token = new Token(TokenClass.CLOSING_PARENTHESIS, new Character(char1).toString());
+                    token = new Token(TokenClass.CLOSING_PARENTHESIS, new Character(char1).toString(), currentPosition);
                     break;
                 default:
-                    token = new Token(TokenClass.CHARACTER, new Character(char1).toString());
+                    token = new Token(TokenClass.CHARACTER, new Character(char1).toString(), currentPosition);
                     break;
             }
             
