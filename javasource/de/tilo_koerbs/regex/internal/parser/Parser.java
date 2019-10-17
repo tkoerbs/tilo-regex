@@ -167,7 +167,7 @@ public class Parser {
         return rootNode;
     }
     
-    protected SyntaxTreeNode addBinaryOperatorToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
+    protected SyntaxTreeNode addBinaryOperatorToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode binaryOperatorNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
     {
         if (rootNode == null)
         {
@@ -181,21 +181,33 @@ public class Parser {
             
             if (rootNode.isCombinedOperand())
             {
-                nodeStack.push(operandNode);
-                rootNode = operandNode;
+                nodeStack.push(binaryOperatorNode);
+                rootNode = binaryOperatorNode;
             }
             else
             {
                 switch (rootNodeType)
                 {
-                    case OPERAND:
                     case UNARY_OPERATOR:
+                        {
+                            String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
+                            throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " after unprocessed unary operator", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+                        }
                     case BINARY_OPERATOR:
+                        {
+                            String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
+                            throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " adjacent to another binary operator", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+                        }
                     case START_CAPTURING_GROUP:
+                        {
+                            String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
+                            throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+                        }
+                    case OPERAND:
                     case END_CAPTURING_GROUP:
                         {
-                            nodeStack.push(operandNode);
-                            rootNode = operandNode;
+                            nodeStack.push(binaryOperatorNode);
+                            rootNode = binaryOperatorNode;
                         }
                         break;
                     default:
@@ -209,12 +221,12 @@ public class Parser {
         return rootNode;
     }
     
-    protected SyntaxTreeNode addStartCapturingGroupToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
+    protected SyntaxTreeNode addStartCapturingGroupToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode startCapturingNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
     {
         if (rootNode == null)
         {
-            nodeStack.push(operandNode);
-            rootNode = operandNode;
+            nodeStack.push(startCapturingNode);
+            rootNode = startCapturingNode;
         }
         else
         {
@@ -223,8 +235,8 @@ public class Parser {
             
             if (rootNode.isCombinedOperand())
             {
-                nodeStack.push(operandNode);
-                rootNode = operandNode;
+                nodeStack.push(startCapturingNode);
+                rootNode = startCapturingNode;
             }
             else
             {
@@ -236,13 +248,13 @@ public class Parser {
                     case START_CAPTURING_GROUP:
                     case END_CAPTURING_GROUP:
                         {
-                            nodeStack.push(operandNode);
-                            rootNode = operandNode;
+                            nodeStack.push(startCapturingNode);
+                            rootNode = startCapturingNode;
                         }
                         break;
                     default:
                         {
-                            throw new IllegalStateException("Internal error parsing input, addOperandToNodeStack: unknown syntax tree node type \"" + rootNodeType + "\" of syntax tree root node " + rootNode + "");
+                            throw new IllegalStateException("Internal error parsing input, addStartCapturingGroupToNodeStack: unknown syntax tree node type \"" + rootNodeType + "\" of syntax tree root node " + rootNode + "");
                         }
                 }
             }
@@ -251,12 +263,12 @@ public class Parser {
         return rootNode;
     }
     
-    protected SyntaxTreeNode addEndCapturingGroupToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
+    protected SyntaxTreeNode addEndCapturingGroupToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode endCapturingNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
     {
         if (rootNode == null)
         {
-            nodeStack.push(operandNode);
-            rootNode = operandNode;
+            nodeStack.push(endCapturingNode);
+            rootNode = endCapturingNode;
         }
         else
         {
@@ -265,8 +277,8 @@ public class Parser {
             
             if (rootNode.isCombinedOperand())
             {
-                nodeStack.push(operandNode);
-                rootNode = operandNode;
+                nodeStack.push(endCapturingNode);
+                rootNode = endCapturingNode;
             }
             else
             {
@@ -278,13 +290,15 @@ public class Parser {
                     case START_CAPTURING_GROUP:
                     case END_CAPTURING_GROUP:
                         {
-                            nodeStack.push(operandNode);
-                            rootNode = operandNode;
+                            transformOperatorNodeToCombinedOperand(endCapturingNode, rootNode, null);
+                            nodeStack.pop();
+                            nodeStack.push(endCapturingNode);
+                            rootNode = endCapturingNode;
                         }
                         break;
                     default:
                         {
-                            throw new IllegalStateException("Internal error parsing input, addOperandToNodeStack: unknown syntax tree node type \"" + rootNodeType + "\" of syntax tree root node " + rootNode + "");
+                            throw new IllegalStateException("Internal error parsing input, addEndCapturingGroupToNodeStack: unknown syntax tree node type \"" + rootNodeType + "\" of syntax tree root node " + rootNode + "");
                         }
                 }
             }
