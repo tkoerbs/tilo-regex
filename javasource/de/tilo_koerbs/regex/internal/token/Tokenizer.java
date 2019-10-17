@@ -6,6 +6,12 @@ import java.util.Iterator;
 
 public class Tokenizer {
     protected LogLevel logLevel;
+	
+	/**
+	 * Count number of opening parentheses in regex.
+	 * Capturing groups are numbered by counting their opening parentheses from left to right. Group zero always stands for the entire expression.
+	 */
+	protected int capturingGroup = 0;
     
     public Tokenizer(LogLevel logLevel)
     {
@@ -112,7 +118,7 @@ public class Tokenizer {
                     break;
                 case '(':
                     // ( start of a capturing group
-                    token = new Token(TokenClass.OPENING_PARENTHESIS, new Character(char1).toString(), currentPosition);
+                    token = new Token(new Character(char1).toString(), currentPosition, ++capturingGroup);
                     break;
                 case ')':
                     // ( end of a capturing group

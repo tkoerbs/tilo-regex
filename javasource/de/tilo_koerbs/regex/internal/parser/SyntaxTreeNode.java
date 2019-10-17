@@ -11,6 +11,7 @@ public class SyntaxTreeNode {
     protected SyntaxTreeNodeSubType syntaxTreeNodeSubType;
     protected TokenType             tokenType;
     protected Token                 token;
+	protected int                   capturingGroup = -1;  // Number of capturing group. Capturing groups are numbered by counting their opening parentheses from left to right. Group zero always stands for the entire expression. -1 is used for "no capturing group".
     protected boolean               combinedOperand = false;
     protected SyntaxTreeNode        operand1 = null;
     protected SyntaxTreeNode        operand2 = null;
@@ -46,6 +47,14 @@ public class SyntaxTreeNode {
     public Token getToken() {
         return token;
     }
+
+	public int getCapturingGroup() {
+		return capturingGroup;
+	}
+
+	public void setCapturingGroup(int capturingGroup) {
+		this.capturingGroup = capturingGroup;
+	}
 
     public boolean isCombinedOperand() {
         return combinedOperand;
