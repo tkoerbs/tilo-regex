@@ -37,7 +37,7 @@ public class Parser {
             
             switch (syntaxTreeNodeType)
             {
-                case SIMPLE_OPERAND:
+                case OPERAND:
                     rootNode = addOperandToNodeStack(nodeStack, rootNode, syntaxTreeNode, syntaxTreeNodeType, token);
                     break;
                 case UNARY_OPERATOR:
@@ -83,7 +83,7 @@ public class Parser {
             {
                 switch (rootNodeType)
                 {
-                    case SIMPLE_OPERAND:
+                    case OPERAND:
                     case UNARY_OPERATOR:
                     case BINARY_OPERATOR:
                     case START_CAPTURING_GROUP:
@@ -127,7 +127,7 @@ public class Parser {
             {
                 switch (rootNodeType)
                 {
-                    case SIMPLE_OPERAND:
+                    case OPERAND:
                         {
                             transformOperatorNodeToCombinedOperand(unaryOperatorNode, rootNode, null);
                             nodeStack.pop();
@@ -188,7 +188,7 @@ public class Parser {
             {
                 switch (rootNodeType)
                 {
-                    case SIMPLE_OPERAND:
+                    case OPERAND:
                     case UNARY_OPERATOR:
                     case BINARY_OPERATOR:
                     case START_CAPTURING_GROUP:
@@ -209,7 +209,7 @@ public class Parser {
         return rootNode;
     }
     
-    protected SyntaxTreeNode addOperandToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
+    protected SyntaxTreeNode addStartCapturingGroupToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
     {
         if (rootNode == null)
         {
@@ -230,7 +230,7 @@ public class Parser {
             {
                 switch (rootNodeType)
                 {
-                    case SIMPLE_OPERAND:
+                    case OPERAND:
                     case UNARY_OPERATOR:
                     case BINARY_OPERATOR:
                     case START_CAPTURING_GROUP:
@@ -251,7 +251,7 @@ public class Parser {
         return rootNode;
     }
     
-    protected SyntaxTreeNode addOperandToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
+    protected SyntaxTreeNode addEndCapturingGroupToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode rootNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
     {
         if (rootNode == null)
         {
@@ -272,7 +272,7 @@ public class Parser {
             {
                 switch (rootNodeType)
                 {
-                    case SIMPLE_OPERAND:
+                    case OPERAND:
                     case UNARY_OPERATOR:
                     case BINARY_OPERATOR:
                     case START_CAPTURING_GROUP:

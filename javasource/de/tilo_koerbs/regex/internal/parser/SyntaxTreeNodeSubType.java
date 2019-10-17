@@ -1,8 +1,8 @@
 package de.tilo_koerbs.regex.internal.parser;
 
 public enum SyntaxTreeNodeSubType {
-    CHARACTER(SyntaxTreeNodeType.SIMPLE_OPERAND),
-    CHARACTER_CLASS(SyntaxTreeNodeType.SIMPLE_OPERAND),
+    CHARACTER(SyntaxTreeNodeType.OPERAND),
+    CHARACTER_CLASS(SyntaxTreeNodeType.OPERAND),
     SEQUENCE(SyntaxTreeNodeType.BINARY_OPERATOR),  // X followed by Y
     QUESTIONMARK_GREEDY(SyntaxTreeNodeType.UNARY_OPERATOR),  // ?
     STAR_GREEDY(SyntaxTreeNodeType.UNARY_OPERATOR),  // *
