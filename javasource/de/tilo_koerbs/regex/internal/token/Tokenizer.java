@@ -9,7 +9,7 @@ public class Tokenizer {
 	
 	/**
 	 * Count number of opening parentheses in regex.
-	 * Capturing groups are numbered by counting their opening parentheses from left to right. Group zero always stands for the entire expression.
+	 * Capturing groups are numbered by counting their opening parentheses from left to right. Group zero always stands for the entire expression. The first opening parentheses defines capturing group 1.
 	 */
 	protected int capturingGroup = 0;
     
@@ -75,7 +75,7 @@ public class Tokenizer {
                     else
                     {
                         // * greedy quantifier "zero or more times"
-                        token = new Token(TokenClass.STAR_GREEDY, new Character(char1).toString(), currentPosition);
+                        token = new Token(TokenClass.STAR_GREEDY, new Character(char1).toString(), currentPosition, capturingGroup);
                     }
                     break;
                 case '?':
@@ -92,7 +92,7 @@ public class Tokenizer {
                     else
                     {
                         // ? greedy quantifier "once or not at all"
-                        token = new Token(TokenClass.QUESTIONMARK_GREEDY, new Character(char1).toString(), currentPosition);
+                        token = new Token(TokenClass.QUESTIONMARK_GREEDY, new Character(char1).toString(), currentPosition, capturingGroup);
                     }
                     break;
                 case '+':
@@ -109,23 +109,23 @@ public class Tokenizer {
                     else
                     {
                         // + greedy quantifier "one or more times"
-                        token = new Token(TokenClass.PLUS_GREEDY, new Character(char1).toString(), currentPosition);
+                        token = new Token(TokenClass.PLUS_GREEDY, new Character(char1).toString(), currentPosition, capturingGroup);
                     }
                     break;
                 case '|':
                     // | logical operator "either or"
-                    token = new Token(TokenClass.OR, new Character(char1).toString(), currentPosition);
+                    token = new Token(TokenClass.OR, new Character(char1).toString(), currentPosition, capturingGroup);
                     break;
                 case '(':
                     // ( start of a capturing group
-                    token = new Token(new Character(char1).toString(), currentPosition, ++capturingGroup);
+                    token = new Token(TokenClass.OPENING_PARENTHESIS, new Character(char1).toString(), currentPosition, ++capturingGroup);  // Each opening parentheses defines a new capturing group.
                     break;
                 case ')':
                     // ( end of a capturing group
-                    token = new Token(TokenClass.CLOSING_PARENTHESIS, new Character(char1).toString(), currentPosition);
+                    token = new Token(TokenClass.CLOSING_PARENTHESIS, new Character(char1).toString(), currentPosition, capturingGroup);
                     break;
                 default:
-                    token = new Token(TokenClass.CHARACTER, new Character(char1).toString(), currentPosition);
+                    token = new Token(TokenClass.CHARACTER, new Character(char1).toString(), currentPosition, capturingGroup);
                     break;
             }
             

@@ -7,6 +7,7 @@ import de.tilo_koerbs.regex.internal.token.TokenType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
+import java.util.regex.PatternSyntaxException;
 
 public class Parser {
 	protected LogLevel logLevel;
@@ -109,7 +110,7 @@ public class Parser {
 		if (topNode == null)
 		{
 			String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-			throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of the regex", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+			throw new PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of the regex", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 		}
 		else
 		{
@@ -138,17 +139,17 @@ public class Parser {
 					case UNARY_OPERATOR:
 						{
 							String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-							throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+							throw new PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 						}
 					case BINARY_OPERATOR:
 						{
 							String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-							throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+							throw new PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 						}
 					case START_CAPTURING_GROUP:
 						{
 							String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-							throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+							throw new PatternSyntaxException("Internal error parsing input, addUnaryOperatorToNodeStack: unary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 						}
 					case END_CAPTURING_GROUP:
 						{
@@ -172,7 +173,7 @@ public class Parser {
 		if (topNode == null)
 		{
 			String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-			throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " at the beginning of the regex", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+			throw new PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " at the beginning of the regex", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 		}
 		else
 		{
@@ -191,17 +192,17 @@ public class Parser {
 					case UNARY_OPERATOR:
 						{
 							String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-							throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " after unprocessed unary operator", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+							throw new PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " after unprocessed unary operator", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 						}
 					case BINARY_OPERATOR:
 						{
 							String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-							throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " adjacent to another binary operator", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+							throw new PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " adjacent to another binary operator", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 						}
 					case START_CAPTURING_GROUP:
 						{
 							String originalRegexSection = token != null ? token.getOriginalRegexSection() : null;
-							throw new java.util.regex.PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
+							throw new PatternSyntaxException("Internal error parsing input, addBinaryOperatorToNodeStack: binary operator " + originalRegexSection + " at the beginning of a capturing group", originalRegex, (token != null ? token.getOriginalRegexSectionIndex() : -1));
 						}
 					case OPERAND:
 					case END_CAPTURING_GROUP:
@@ -339,6 +340,7 @@ public class Parser {
 				SyntaxTreeNode startCapturingNode = nodeStack.pop();  // In case stack is not empty this must be our start capturing node.
 				int capturingGroup = startCapturingNode.getToken().getCapturingGroup();
 				combinedOperand.setCapturingGroup(capturingGroup);
+				nodeStack.push(combinedOperand);
 			}
 			else
 			{
@@ -348,8 +350,8 @@ public class Parser {
 		else
 		{
 			Token endCapturingToken = endCapturingNode.getToken();
-			String originalRegexSection = endCapturingToken != null ? endCapturingToken.getOriginalRegexSection() : null;
-			throw new java.util.regex.PatternSyntaxException("Internal error parsing input, transformStackForEndCapturingNode: empty capturing group for end capturing node " + endCapturingNode + "", originalRegex, (endCapturingToken != null ? endCapturingToken.getOriginalRegexSectionIndex() : -1));
+			//String originalRegexSection = endCapturingToken != null ? endCapturingToken.getOriginalRegexSection() : null;
+			throw new PatternSyntaxException("Internal error parsing input, transformStackForEndCapturingNode: empty capturing group for end capturing node " + endCapturingNode + "", originalRegex, (endCapturingToken != null ? endCapturingToken.getOriginalRegexSectionIndex() : -1));
 		}
 	}
 	
@@ -362,8 +364,33 @@ public class Parser {
 	 */
 	protected SyntaxTreeNode transformStackIntoCombinedOperand(Stack<SyntaxTreeNode> nodeStack, boolean stopAtStartCapturingNode)
 	{
-		SyntaxTreeNode topNode = ;
+		SyntaxTreeNode combinedOperand = null;
 		
-		return topNode;
+		while (!nodeStack.isEmpty() || stopAtStartCapturingNode && !nodeStack.peek().getSyntaxTreeNodeSubType().getBaseType().equals(SyntaxTreeNodeType.START_CAPTURING_GROUP))
+		{
+			if (combinedOperand != null)
+			{
+				SyntaxTreeNode leftHandOperand = nodeStack.pop();
+				
+				SyntaxTreeNodeSubType syntaxTreeNodeSubType = SyntaxTreeNodeSubType.SEQUENCE;
+				//SyntaxTreeNodeType syntaxTreeNodeType = syntaxTreeNodeSubType.getBaseType();
+				SyntaxTreeNode binaryOperatorNode = new SyntaxTreeNode(syntaxTreeNodeSubType, null, null);
+				binaryOperatorNode.setOperand1(leftHandOperand);
+				binaryOperatorNode.setOperand2(combinedOperand);
+				
+				combinedOperand = binaryOperatorNode;
+			}
+			else
+			{
+				combinedOperand = nodeStack.pop();
+			}
+		}
+		
+		if (combinedOperand != null)
+		{
+			nodeStack.push(combinedOperand);
+		}
+		
+		return combinedOperand;
 	}
 }

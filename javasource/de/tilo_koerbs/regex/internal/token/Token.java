@@ -4,19 +4,14 @@ public class Token {
     protected TokenClass tokenClass;
     protected String originalRegexSection;
     protected int originalRegexSectionIndex;
-    protected int capturingGroup;  // Valid and required only for tokenClass=TokenClass.OPENING_PARENTHESIS
+    protected int capturingGroup;
     
-    public Token(TokenClass tokenClass, String originalRegexSection, int originalRegexSectionIndex)
+    public Token(TokenClass tokenClass, String originalRegexSection, int originalRegexSectionIndex, int capturingGroup)
     {
         this.tokenClass                = tokenClass;
         this.originalRegexSection      = originalRegexSection;
         this.originalRegexSectionIndex = originalRegexSectionIndex;
-    }
-    
-    public Token(String originalRegexSection, int originalRegexSectionIndex, int capturingGroup)
-    {
-        this(TokenClass.OPENING_PARENTHESIS, originalRegexSection, originalRegexSectionIndex);
-		this.capturingGroup = capturingGroup;
+		this.capturingGroup            = capturingGroup;
     }
 
     public TokenClass getTokenClass() {
@@ -33,9 +28,5 @@ public class Token {
 
 	public int getCapturingGroup() {
 		return capturingGroup;
-	}
-
-	protected void setCapturingGroup(int capturingGroup) {
-		this.capturingGroup = capturingGroup;
 	}
 }
