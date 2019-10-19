@@ -60,7 +60,18 @@ public class Parser {
 			}
 		}
 		
-		return topNode;
+		SyntaxTreeNode combinedOperand = transformStackIntoCombinedOperand(nodeStack, false);
+		if (combinedOperand == null)
+		{
+			throw new PatternSyntaxException("Internal error parsing input, parse: empty syntax tree", originalRegex, -1);
+		}
+
+		if (logLevel.getLevelCode() >= LogLevel.DEBUG.getLevelCode())
+		{
+			
+		}
+		
+		return combinedOperand;
 	}
 	
 	protected SyntaxTreeNode addOperandToNodeStack(Stack<SyntaxTreeNode> nodeStack, SyntaxTreeNode topNode, SyntaxTreeNode operandNode, SyntaxTreeNodeType syntaxTreeNodeType, Token token)
